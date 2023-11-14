@@ -10,8 +10,8 @@
         "slotSetting": false
     },
     {
-        "name": "BLOB_CONNECT_STRING",
-        "value": "@Microsoft.KeyVault(SecretUri=https://{{param.keyvault}}.vault.azure.net/secrets/storageConnectionString)",
+        "name": "storage_account_name",
+        "value": "{{param.storage_account_name}}",
         "slotSetting": false
     },
     {
@@ -65,15 +65,11 @@
         "slotSetting": false
     },
     {
-        "name": "StorageAccountName",
-        "value": "{{param.dataStorageAccountName}}",
+        "name": "storage_account_name",
+        "value": "{{param.storage_account_name}}", 
         "slotSetting": false
     },
-    {
-        "name": "StorageKey",
-        "value": "@Microsoft.KeyVault(SecretUri=https://{{param.keyvault}}.vault.azure.net/secrets/storageAccountKey)",
-        "slotSetting": false
-    },
+
     {
         "name": "MAX_CHARS_PER_DOC",
         "value": "5120",

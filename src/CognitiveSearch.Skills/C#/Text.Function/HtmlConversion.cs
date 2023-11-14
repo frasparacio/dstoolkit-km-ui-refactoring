@@ -32,14 +32,14 @@ namespace Text.HTML
 
         private static readonly Dictionary<string, BlobContainerClient> containers = new Dictionary<string, BlobContainerClient>();
 
-        private static readonly BlobContainerClient imagesContainer = new BlobContainerClient(IConstants.ContainerConnectionString, IConstants.ImageContainerName);
-        private static readonly BlobContainerClient metadatacontainer = new BlobContainerClient(IConstants.ContainerConnectionString, IConstants.MetadataContainerName);
+        private static readonly BlobContainerClient imagesContainer = new BlobContainerClient(IConstants.storage_account_name, IConstants.ImageContainerName);
+        private static readonly BlobContainerClient metadatacontainer = new BlobContainerClient(IConstants.storage_account_name, IConstants.MetadataContainerName);
 
         static HtmlConversion()
         {
             foreach (var container in IConstants.ContainerNames)
             {
-                containers.Add(container, new BlobContainerClient(IConstants.ContainerConnectionString, container));
+                containers.Add(container, new BlobContainerClient(IConstants.storage_account_name, container));
             }
         }
 

@@ -10,8 +10,8 @@
         "slotSetting": true
     },
     {
-        "name": "AZURE_STORAGE_CONNECTION_STRING",
-        "value": "@Microsoft.KeyVault(SecretUri=https://{{param.keyvault}}.vault.azure.net/secrets/storageConnectionString)",
+        "name": "storage_account_name",
+        "value": "{{param.storage_account_name}}",
         "slotSetting": false
     },
     {

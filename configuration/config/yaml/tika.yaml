@@ -24,7 +24,7 @@ spec:
         env:
         - name: WEBSITE_HOSTNAME
           value: "{{param.kubernetesHost}}"
-        - name: AZURE_STORAGE_CONNECTION_STRING
+        - name: storage_account_name
           value: "{{param.storageConnectionString}}"
         resources:
           requests:

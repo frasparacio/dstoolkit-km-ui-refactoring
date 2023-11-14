@@ -8,7 +8,8 @@ import base64
 from datetime import datetime, timedelta
 from azure.core.credentials import AzureKeyCredential
 from azure.ai.translation.document import DocumentTranslationClient
-from azure.storage.blob import BlobClient,generate_blob_sas, generate_container_sas,BlobSasPermissions,ContainerSasPermissions, ContentSettings, BlobProperties
+from azure.storage.blob import BlobClient,BlobServiceClient,ContainerClient, generate_blob_sas, generate_container_sas,BlobSasPermissions,ContainerSasPermissions, ContentSettings, BlobProperties
+from azure.identity import DefaultAzureCredential
 
 from .. import LanguageConstants
 
@@ -23,41 +24,60 @@ document_translation_client = DocumentTranslationClient(endpoint, credential)
 #
 # Azure Blob Storage for Document Translated outputs
 #
+
+
 blob_storage_integration=False
 
 # Where the translated documents will be put
 TRANSLATION_CONTAINER = 'translation'
 
-if 'StorageAccountName' in os.environ:
-    STORAGE_ACCOUNT_NAME=os.environ['StorageAccountName']
-    STORAGE_ACCOUNT_KEY=os.environ['StorageKey']
+if 'storage_account_name' in os.environ:
+    STORAGE_ACCOUNT_NAME=os.environ['storage_account_name']
+    
     blob_storage_integration=True
+    # Construct the blob endpoint from the account name
+    account_url = "https://" + STORAGE_ACCOUNT_NAME + ".blob.core.windows.net"
 
+    #Create a BlobServiceClient object using DefaultAzureCredential
+    blob_service_client = BlobServiceClient(account_url, credential=DefaultAzureCredential())
 
-def get_blob_sas_source(container_name, blob_name):
-    sas_token = generate_blob_sas(account_name=STORAGE_ACCOUNT_NAME, 
-                                container_name=container_name,
-                                blob_name=blob_name,
-                                account_key=STORAGE_ACCOUNT_KEY,
-                                permission=BlobSasPermissions(read=True,list=True),
-                                expiry=datetime.utcnow() + timedelta(hours=1))
+def request_user_delegation_key(self, blob_service_client: BlobServiceClient) :
+    # Get a user delegation key that's valid for 1 day
+    delegation_key_start_time = datetime.datetime.now(datetime.timezone.utc)
+    delegation_key_expiry_time = delegation_key_start_time + datetime.timedelta(days=1)
+
+    user_delegation_key = blob_service_client.get_user_delegation_key(
+        key_start_time=delegation_key_start_time,
+        key_expiry_time=delegation_key_expiry_time
+    )
+
+    return user_delegation_key
+
+def get_blob_sas_source(container_name, blob_name, sas_token):
+        # The SAS token string can be appended to the resource URL with a ? delimiter
+    # or passed as the credential argument to the client constructor
+    blob_client = BlobClient(account_url=account_url, container_name=container_name, blob_name=blob_name, credential=DefaultAzureCredential())
+    sas_url = f"{blob_client.url}?{sas_token}"
+
+    # Create a ContainerClient object with SAS authorization
+    sas_token = BlobClient(container_url=sas_url)
+   
     return '?'+sas_token
 
-def get_blob_sas_target(container_name, blob_name):
-    sas_token = generate_blob_sas(account_name=STORAGE_ACCOUNT_NAME, 
-                                container_name=container_name,
-                                blob_name=blob_name,
-                                account_key=STORAGE_ACCOUNT_KEY,
-                                permission=BlobSasPermissions(write=True,list=True),
-                                expiry=datetime.utcnow() + timedelta(hours=1))
+def get_blob_sas_target(container_name, blob_name, sas_token):
+    blob_client = BlobClient(account_url=account_url, container_name=container_name, blob_name=blob_name, credential=DefaultAzureCredential())
+    sas_url = f"{blob_client.url}?{sas_token}"
+
+    # Create a ContainerClient object with SAS authorization
+    sas_token = BlobClient(container_url=sas_url)
     return '?'+sas_token
 
-def get_container_sas(container_name):
-    sas_token = generate_container_sas(account_name=STORAGE_ACCOUNT_NAME, 
-                                container_name=container_name,
-                                account_key=STORAGE_ACCOUNT_KEY,
-                                permission=ContainerSasPermissions(write=True,list=True,read=True),
-                                expiry=datetime.utcnow() + timedelta(hours=1))
+def get_container_sas(container_name, sas_token):
+    container_client = ContainerClient(account_url=account_url, container_name=container_name, credential=DefaultAzureCredential())
+    sas_url = f"{container_client.url}?{sas_token}"
+
+    # Create a ContainerClient object with SAS authorization
+    sas_token = ContainerClient.from_container_url(container_url=sas_url)
     return '?'+sas_token
 
 ## Perform an operation on a record
@@ -117,11 +137,15 @@ def transform_value(record, poll=True, simulation=False):
                         if fromLanguageCode != target_language:
                             if not simulation:
                                 # Translation require
-                                document_url_with_sas_token = document_url + get_blob_sas_source(blob_client.container_name,blob_client.blob_name)
+                                # The SAS token string can be appended to the resource URL with a ? delimiter
+                                # or passed as the credential argument to the client constructor
+                                
+                                request_user_delegation_key_source = request_user_delegation_key(BlobServiceClient(account_url=account_url, credential=DefaultAzureCredential()))
+                                document_url_with_sas_token = get_blob_sas_source(container_name=blob_client.container_name, blob_name= blob_client.blob_name, sas_token=request_user_delegation_key_source)
 
                                 target_url = blob_client.scheme +'://'+blob_client.primary_hostname+'/'+TRANSLATION_CONTAINER+'/'+blob_client.container_name+"/"+blob_client.blob_name
-                                # target_url_with_sas_token=target_url+get_blob_sas_target(TRANSLATION_CONTAINER,blob_client.container_name+"/"+blob_client.blob_name)
-                                target_url_with_sas_token=target_url+get_container_sas(TRANSLATION_CONTAINER)
+                                request_user_delegation_key_target= request_user_delegation_key(BlobServiceClient(account_url=target_url, credential=DefaultAzureCredential()))
+                                target_url_with_sas_token= get_blob_sas_source(container_name=TRANSLATION_CONTAINER, blob_name= blob_client.blob_name, sas_token=request_user_delegation_key_target)
 
                                 poller = document_translation_client.begin_translation(document_url_with_sas_token, target_url_with_sas_token, target_language, storage_type="File")
                                 document['data']['translation_opid'] = poller.id

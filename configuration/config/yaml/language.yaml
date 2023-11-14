@@ -24,13 +24,13 @@ spec:
         env:
         - name: WEBSITE_HOSTNAME
           value: "{{param.kubernetesHost}}"
-        - name: AZURE_STORAGE_CONNECTION_STRING
+        - name: storage_account_name
           value: "{{param.storageConnectionString}}"
         - name: APPINSIGHTS_INSTRUMENTATIONKEY
           value: "{{param.appInsightsServiceKey}}"
         - name: AzureWebJobsStorage
           value: "{{param.techStorageConnectionString}}"
-        - name: BLOB_CONNECT_STRING
+        - name: storage_account_name
           value: "{{param.storageConnectionString}}"
         - name: COGNITIVE_SERVICES_ENDPOINT
           value: "https://{{param.cogSvcLanguage}}.cognitiveservices.azure.com"
@@ -42,10 +42,6 @@ spec:
           value: "{{config.location}}"
         - name: MODEL_SIZE
           value: "lg"
-        - name: StorageAccountName
-          value: "{{param.dataStorageAccountName}}"
-        - name: StorageKey
-          value: "{{param.storageAccountKey}}"
         resources:
           requests:
             cpu: 500m

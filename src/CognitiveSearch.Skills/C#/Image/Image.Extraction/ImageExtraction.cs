@@ -28,13 +28,13 @@ namespace Image.Commons.Extraction
 
         private static readonly Dictionary<string, BlobContainerClient> containers = new();
 
-        private static readonly BlobContainerClient metadatacontainer = new(IConstants.ContainerConnectionString, IConstants.MetadataContainerName);
+        private static readonly BlobContainerClient metadatacontainer = new(IConstants.storage_account_name, IConstants.MetadataContainerName);
 
         static ImageExtraction()
         {
             foreach (var container in IConstants.ContainerNames)
             {
-                containers.Add(container, new BlobContainerClient(IConstants.ContainerConnectionString, container));
+                containers.Add(container, new BlobContainerClient(IConstants.storage_account_name, container));
             }
 
             webclient.Timeout = TimeSpan.FromMinutes(30);

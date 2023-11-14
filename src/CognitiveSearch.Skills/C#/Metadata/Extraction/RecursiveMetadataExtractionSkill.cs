@@ -24,14 +24,14 @@ namespace Metadata.Extraction
         private static readonly HttpClient webclient = new HttpClient();
 
         private static readonly Dictionary<string, BlobContainerClient> containers = new Dictionary<string, BlobContainerClient>();
-        //private static readonly BlobContainerClient container = new BlobContainerClient(IConstants.ContainerConnectionString, IConstants.ContainerNames);
-        private static readonly BlobContainerClient metadatacontainer = new BlobContainerClient(IConstants.ContainerConnectionString, IConstants.MetadataContainerName);
+        //private static readonly BlobContainerClient container = new BlobContainerClient(IConstants.storage_account_name, IConstants.ContainerNames);
+        private static readonly BlobContainerClient metadatacontainer = new BlobContainerClient(IConstants.storage_account_name, IConstants.MetadataContainerName);
 
         static RecursiveMetadataExtractionSkill()
         {
             foreach (var container in IConstants.ContainerNames)
             {
-                containers.Add(container, new BlobContainerClient(IConstants.ContainerConnectionString, container));
+                containers.Add(container, new BlobContainerClient(IConstants.storage_account_name, container));
             }
         }
 
