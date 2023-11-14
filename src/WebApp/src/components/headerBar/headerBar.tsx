@@ -54,7 +54,7 @@ export function HeaderBar({ location }: { location?: NavLocation }) {
     const navigate = useNavigate();
     const stylesAvatar = useStylesAvatar();
 
-    const linkClasses = "cursor-pointer hover:no-underline hover:border-b-[3px] h-9 min-h-0 block";
+    const linkClasses = "cursor-pointer hover:no-underline hover:border-b-[3px] h-9 min-h-0 block text-white";
     const linkCurrent = "pointer-events-none border-b-[3px]";
     const isAuthenticated = accounts.length > 0;
     const isAdmin = isPlatformAdmin(accounts);
@@ -68,15 +68,15 @@ export function HeaderBar({ location }: { location?: NavLocation }) {
                 location: NavLocation.Home,
                 to: "/",
             },
-            isAdmin
-                ? {
-                      key: "contribute",
-                      label: t("components.header-bar.contribute"),
-                      isPrimary: true,
-                      location: NavLocation.Contribute,
-                      to: "/editor",
-                  }
-                : null,
+            // isAdmin
+            //     ? {
+            //           key: "contribute",
+            //           label: t("components.header-bar.contribute"),
+            //           isPrimary: true,
+            //           location: NavLocation.Contribute,
+            //           to: "/editor",
+            //       }
+            //     : null,
             !isAuthenticated
                 ? {
                       key: "sign-in",
@@ -135,17 +135,19 @@ export function HeaderBar({ location }: { location?: NavLocation }) {
 
     return (
         <>
-            <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                    <img
-                        className="h-[24px] w-[112px] object-contain object-left"
-                        src="/img/logo-small.png"
-                        alt={t("common.title")}
-                    />
-                    <Link type="button" to="/" className="ml-4 border-l-[1.5px] border-l-neutral-500 pl-4">
-                        <h5>{t("common.title")}</h5>
-                    </Link>
+            <div className="flex mr-20 ml-20 justify-between ">
+                <div className="flex justify-between gap-3">
+                    <img className="my-auto" src="/img/ms-logo-small.png" alt="logo" />
+                    <div className="border border-zinc-500"></div>
+                    <img className="my-auto " src="/img/Contoso_Logo_sm.png" alt="logo" />
+                    <div className="font-roboto order-4 pt-1 text-base font-bold leading-tight tracking-wider text-white">
+                        CONTOSO
+                    </div>
+                    <div className="order-5 pt-2 text-sm font-semibold leading-tight text-white">
+                        Knowledge Mining
+                    </div>
                 </div>
+
                 <nav className="whitespace-nowrap text-lg font-semibold leading-10">
                     <ul
                         className={
@@ -154,7 +156,7 @@ export function HeaderBar({ location }: { location?: NavLocation }) {
                         }
                     >
                         {/* Close button - Small sizes only */}
-                        <li className="z-90 absolute top-0 right-6 md:hidden">
+                        <li className="z-90 absolute right-6 top-0 md:hidden">
                             <button
                                 className="cursor-pointer text-right text-3xl hover:no-underline"
                                 onClick={toggleMenu}

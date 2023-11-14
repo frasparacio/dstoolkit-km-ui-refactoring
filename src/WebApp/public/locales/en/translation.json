@@ -21,6 +21,16 @@
             "manage-cookies": "Manage cookies",
             "terms-of-use": "Terms of use",
             "copyright": "© 2023"
+        },
+        "search-box": {
+            "label": "I am looking for",
+            "placeholder": "Ask me anything..."
+        },
+        "filter": {
+            "title": "Filter",
+            "industries": "Industries",
+            "tags": "Tags",
+            "clear-all": "Clear all"
         }
     },
     "entities": {},
