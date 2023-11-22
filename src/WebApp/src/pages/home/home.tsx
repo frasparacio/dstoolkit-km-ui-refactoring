@@ -24,7 +24,6 @@ interface HomeProps {
 export function Home({ isSearchResultsPage }: HomeProps) {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    // const [query, setQuery] = useState<string>();
     const [searchParams, setSearchParams] = useSearchParams();
     const [filters, setFilters] = useState<Record<FacetType, string[]>>();
     const [filterOpen, setFilterOpen] = useState<boolean>(true);
@@ -37,7 +36,9 @@ export function Home({ isSearchResultsPage }: HomeProps) {
     const [isQueryTranslation, setIsQueryTranslation] = useState(true); // State for isQueryTranslation
     const [isQuerySpellCheck, setIsQuerySpellCheck] = useState(true); // State for isQuerySpellCheck
     const [suggestionsAsFilter, setSuggestionsAsFilter] = useState(true); // State for suggestionsAsFilter
-    const [orMVRefinerOperator, setOrMVRefinerOperator] = useState(false);
+    const [orMVRefinerOperator, setOrMVRefinerOperator] = useState(false); // State for orMVRefinerOperator
+
+    const [data, setData] = useState<Paged<SearchResult>>(); // State for data
 
     const navigate = useNavigate();
 
@@ -111,8 +112,8 @@ export function Home({ isSearchResultsPage }: HomeProps) {
             },
         };
 
-        // const result: Paged<DataType> = await httpClient.post(`${window.ENV.API_URL}/something`, payload);
-        // setData(result);
+        const result: Paged<SearchResult> = await httpClient.post(`${window.ENV.API_URL}/api/Search/getDocuments`, payload);
+        setData(result);
         setIsLoading(false);
     }
 
