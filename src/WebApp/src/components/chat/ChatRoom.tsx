@@ -19,8 +19,8 @@ export function ChatRoom() {
 
     const [answers, setAnswers] = useState<[prompt: string, response: ChatApiResponse][]>([]);
 
-    const [model, setModel] = useState<string>("chat_35");
-    const [source, setSource] = useState<string>("gptchat");
+    const [model, setModel] = useState<string>("chat_4");
+    const [source, setSource] = useState<string>("rag_wor");
     const [loading, setLoading] = useState<boolean>(false);
 
     const chatWindowRef = useRef<HTMLDivElement>(null);
