@@ -135,21 +135,21 @@ export function HeaderBar({ location }: { location?: NavLocation }) {
 
     return (
         <>
-            <div className="flex mr-20 ml-20 justify-between ">
+            <div className="flex mr-20 ml-20 justify-between">
                 <div className="flex justify-between gap-3">
                     <img className="my-auto" src="/img/ms-logo-small.png" alt="logo" />
                     <div className="border border-zinc-500"></div>
-                    <img className="my-auto " src="/img/Contoso_Logo_sm.png" alt="logo" />
-                    <div className="order-5 pt-2 text-sm font-semibold leading-tight text-white">
+                    <img className="my-auto " src="/img/Contoso_Logo_sm.png" alt="logo" />  
+                    <div className="order-5 pt-2 text-sm font-semibold leading-tight text-white mt-3">
                         Retrieval Augmented Generation & Knowledge Mining Platform
                     </div>
                 </div>
-
+ 
                 <nav className="whitespace-nowrap text-lg font-semibold leading-10">
                     <ul
                         className={
                             (openDrawer ? "h-auto w-auto " : "hidden ") +
-                            "fixed right-0 z-50 -mt-[10px] bg-white px-6 pb-6 pt-12 shadow-md md:relative md:flex md:flex-row md:space-x-3 md:bg-transparent md:p-0 md:pt-0.5 md:shadow-none lg:space-x-10"
+                            "fixed right-0 z-50 mt-[10px] bg-white px-6 pb-6 pt-12 shadow-md md:relative md:flex md:flex-row md:space-x-3 md:bg-transparent md:p-0 md:pt-0.5 md:shadow-none lg:space-x-10"
                         }
                     >
                         {/* Close button - Small sizes only */}
