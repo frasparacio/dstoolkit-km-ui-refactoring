@@ -52,7 +52,7 @@ jobs:
             sed -i "s+__auth_client_id__+${{ vars.AUTH_CLIENT_ID }}+g; s+__auth_instance__+${{ vars.AUTH_INSTANCE }}+g; s+__auth_tenant_id__+${{ vars.AUTH_TENANT_ID }}+g; s+__auth_scope__+${{ vars.AUTH_SCOPE }}+g" ${{ env.APP_PATH }}/public/config.env.js
             cp ${{ env.APP_PATH }}/public/config.env.js ${{ env.APP_PATH }}/public/config.js
             cat ${{ env.APP_PATH }}/public/config.js
-            sed -i "s+__api_url__+${{ vars.API_URL }}+g; s+__app_insights_url__+${{ vars.APP_INSIGHTS_URL }}+g" ./frontend/webapp/public/staticwebapp.config.json
+            sed -i "s+__api_url__+${{ vars.API_URL }}+g; s+__app_insights_url__+${{ vars.APP_INSIGHTS_URL }}+g" ${{ env.APP_PATH }}/public/staticwebapp.config.json
             
         - name: Add .npmrc configuration for private registry access
           run: |
