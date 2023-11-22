@@ -30,7 +30,9 @@ export function Home({ isSearchResultsPage }: HomeProps) {
     const [showCopilot, setShowCopilot] = useState<boolean>(false);
 
     const [query, setQuery] = useState(""); // State for queryText
-    const [incomingFilter, setIncomingFilter] = useState(""); // State for incomingFilter
+    const [incomingFilter, setIncomingFilter] = useState(
+        "(document/embedded eq false and document/translated eq false)"
+    ); // State for incomingFilter
     const [scoringProfile, setScoringProfile] = useState(""); // State for scoringProfile
     const [isSemanticSearch, setIsSemanticSearch] = useState(false); // State for isSemanticSearch
     const [isQueryTranslation, setIsQueryTranslation] = useState(true); // State for isQueryTranslation
@@ -54,6 +56,12 @@ export function Home({ isSearchResultsPage }: HomeProps) {
             searchBoxRef.current?.reset();
         }
     }, [isSearchResultsPage]);
+
+    useEffect(() => {
+        // console.log("*** query", query);
+        // Wait till query is defined unless this is the initial hit to home page
+        if (!isSearchResultsPage || query !== undefined) loadDataAsync();
+    }, [query]);
 
     function onSearchChanged(searchValue: string): void {
         console.log("*** onSearchChanged", searchValue);
@@ -112,17 +120,34 @@ export function Home({ isSearchResultsPage }: HomeProps) {
             },
         };
 
-        const result: Paged<SearchResult> = await httpClient.post(`${window.ENV.API_URL}/api/Search/getDocuments`, payload);
-        setData(result);
+        const response: any = await httpClient.post(`${window.ENV.API_URL}/api/Search/getDocuments`, payload);
+        console.log("*** response", response);
+        if (response) {
+            const result: Paged<SearchResult> = response.results.map((x: any) => {
+                return {
+                    content_group: x.Document.content_group,
+                    title: x.Document.title,
+                    translated_title: x.Document.translated_title,
+                    authors: x.Document.authors,
+                    summary: x.Document.summary,
+                    key_phrases: x.Document.key_phrases,
+                    source_last_modified: x.Document.source_last_modified,
+                    source_processing_date: x.Document.source_processing_date,
+                    document_url: x.Document.document_url,
+                    count: x.count,
+                };
+            });
+            setData(result);
+            console.log("*** data", data);
+        } else {
+            console.error("API response or data is undefined");
+        }
         setIsLoading(false);
     }
 
     return (
         <>
-            <Header
-                className="flex flex-col justify-between bg-contain bg-right-bottom bg-no-repeat"
-                size={"large"}
-            >
+            <Header className="flex flex-col justify-between bg-contain bg-right-bottom bg-no-repeat" size={"large"}>
                 <div className="-ml-8">
                     <HeaderBar location={NavLocation.Home} />
                 </div>
@@ -181,7 +206,7 @@ export function Home({ isSearchResultsPage }: HomeProps) {
 
                     {filterOpen && (
                         <div className="col-span-1 col-start-1 md:block">
-                            <Filter className="" onFilterChanged={onFilterChanged} />
+                            {/* <Filter className="" onFilterChanged={onFilterChanged} /> */}
                         </div>
                     )}
 
@@ -209,9 +234,7 @@ export function Home({ isSearchResultsPage }: HomeProps) {
 
                     {showCopilot && (
                         <div className="col-span-1 col-start-5 -mt-8">
-                            <div className="flex flex-col">
-                                {/* <ChatIntegration /> */}
-                            </div>
+                            <div className="flex flex-col">{/* <ChatIntegration /> */}</div>
                         </div>
                     )}
                 </div>

@@ -17,9 +17,9 @@ export function SearchResultCard() {
         <div className="min-h-80 flex min-w-[278px] flex-grow flex-col overflow-hidden bg-white py-5 pl-5 pr-4 ">
             <div className="-ml-5 -mr-4 -mt-5 h-1" />
             <div className="flex flex-row ">
-                <div className="flex items-center">imggggggggggg</div>
+                <div className="flex items-center">imggggggggggg</div> 
                 <div className="ml-5 flex-col">
-                    <div className="flex-1 flex-row ">icon + citation format</div>
+                    <div className="flex-1 flex-row ">icon + citation format</div> 
                     <div className="flex-1 flex-row mt-2">Title - exampleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</div>
                     <div className="flex-1 flex-row mt-2">Publish date</div>
                     <div className={styles.wrapper}>
