@@ -13,6 +13,7 @@ namespace Knowledge.Services.Chat.PromptFlow
     using Azure.Core;
     using Knowledge.Configuration.Chat;
     using Knowledge.Models.Chat;
+    using Knowledge.Services.Chat.PromptFlowChat;
     using Knowledge.Services.Helpers;
     using Microsoft.ApplicationInsights;
     using Microsoft.Extensions.Caching.Distributed;
@@ -54,9 +55,9 @@ namespace Knowledge.Services.Chat.PromptFlow
 
             try
             {
-                var pfRequest = MapChatRequestToPFChatRequest(request);
+                var pfRequest = PromptFlowMapper.MapChatRequestToPFChatRequest(request);
                 var answer = await InvokeRequestResponseService(pfRequest);
-                var response = MapPFChatResponseToChatResponse(answer);
+                var response = PromptFlowMapper.MapPFChatResponseToChatResponse(answer);
                 await _chatHistoryService.AddChatMessageToHistory(userId, sessionId, "agent", response.answer, DateTime.UtcNow);
                 return response;
             }
@@ -68,57 +69,7 @@ namespace Knowledge.Services.Chat.PromptFlow
             LoggerHelper.Instance.LogVerbose($"End:Invoked ChatCompletion method in PromptFlowChatService. Return empty result");
 
             return new ChatResponse();
-        }
-
-        private PromptFlowChatRequest MapChatRequestToPFChatRequest(ChatRequest request)
-        {
-            return new PromptFlowChatRequest
-            {
-                question = request.prompt,
-                source = request.options.source,
-                model = request.options.model,
-                chat_history = MapChatHistoryToPromptFlowFormat(request.history)
-            };
-        }
-
-        private ChatResponse MapPFChatResponseToChatResponse(PromptFlowResponse response)
-        {
-            var answerSplit = response.answer.Split("\n\n");
-
-            var chatResponse = new ChatResponse()
-            {
-                answer = answerSplit[0],
-                followUpQs = answerSplit.Length > 1 ? answerSplit[1].Split("\n- ").Skip(1) : new List<string>(),
-                references = answerSplit.Length > 2 ? GetChatReferences(answerSplit[2]) : new List<ChatReference>()
-            };
-
-            return chatResponse;
-        }
-
-        private IEnumerable<ChatReference> GetChatReferences(string references)
-        {
-            try
-            {
-                return references.Split(" ").Skip(2).Select(x => GetChatReference(x));
-            }
-            catch
-            {
-                return Enumerable.Empty<ChatReference>();
-            }
-        }
-
-        private ChatReference GetChatReference(string reference)
-        {
-            return new ChatReference
-            {
-                name = $"Ref - {reference}",
-                chunkId = reference,
-                parentId = reference.Split("_")[1],
-                page = reference.Split("_")[3],
-                url = $"/documents/{reference}",
-                isAbsoluteUrl = false
-            };
-        }
+        }        
 
         async Task<PromptFlowResponse> InvokeRequestResponseService(PromptFlowChatRequest request)
         {
@@ -142,6 +93,9 @@ namespace Knowledge.Services.Chat.PromptFlow
 
                 var content = new StringContent(requestBody);
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                //content.Headers.Add("azureml-model-deployment", "unilever-pf-chat-5");
+
                 HttpResponseMessage response = await client.PostAsync("", content);
 
                 if (response.IsSuccessStatusCode)
@@ -164,32 +118,6 @@ namespace Knowledge.Services.Chat.PromptFlow
             }
         }
 
-        private PFChatHistoryTurn[] MapChatHistoryToPromptFlowFormat(ChatMessage[] history)
-        {
-            var pfHistory = new List<PFChatHistoryTurn>();
-
-            for (var i = 0; i < history.Length; i++)
-            {
-                if (history[i].role == "user")
-                {
-                    var turn = new PFChatHistoryTurn()
-                    {
-                        inputs = new PromptFlowChatBaseRequest
-                        {
-                            question = history[i].content
-                        },
-                        outputs = new PromptFlowChatResponse
-                        {
-                            answer = history[i + 1].content
-                        }
-                    };
-
-                    pfHistory.Add(turn);
-                }
-                continue;
-            }
-
-            return pfHistory.ToArray();
-        }
+        
     }
 }
