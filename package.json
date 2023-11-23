@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@fluentui/react": "^8.112.9",
+    "@fluentui/react-file-type-icons": "^8.10.4"
+  }
+}

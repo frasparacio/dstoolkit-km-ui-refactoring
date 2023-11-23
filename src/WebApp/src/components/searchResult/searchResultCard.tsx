@@ -1,6 +1,9 @@
+import React, { useState } from "react";
 import { Button, makeStyles, Text } from "@fluentui/react-components";
 import { Tag, TagGroup } from "@fluentui/react-tags-preview";
 import { Sparkle24Regular } from "@fluentui/react-icons";
+import { Icon } from '@fluentui/react';
+import { getFileTypeIconProps, FileIconType } from '@fluentui/react-file-type-icons';
 import { KMBrandRamp } from "../../styles";
 
 interface SearchResultCardProps {
@@ -36,14 +39,32 @@ export function SearchResultCard({
     document_url,
 }: SearchResultCardProps) {
     const styles = useStyles();
+
+    let fileType = '';
+    switch(content_group.toLowerCase()) {
+        case 'pdf':
+            fileType = 'pdf';
+            break;
+        case 'doc':
+            fileType = 'docx';
+            break;
+        case 'ppt':
+            fileType = 'pptx';
+            break;
+        // Add more cases as needed
+        default:
+            fileType = 'default'; // Default file type
+    }
+    
     return (
         <div className="min-h-80 flex min-w-[278px] flex-grow flex-col overflow-hidden bg-white py-5 pl-5 pr-4 ">
             <div className="-ml-5 -mr-4 -mt-5 h-1" />
             <div className="flex flex-row ">
                 <div className="flex items-center">imggggggggggg</div>
                 <div className="ml-5 flex-col">
-                    <div className="flex-1 flex-row">
-                        <Text weight="semibold">{content_group}</Text>
+                    <div className="flex-1 flex-row items center">
+                            <Icon className="" {...getFileTypeIconProps({ extension: fileType, size: 24, imageFileType: 'png' }) } />
+                            <Text className="ml-2 pb-2" weight="semibold">{content_group}</Text>
                     </div>
                     <div className="mt-2 flex-1 flex-row">
                         <Text as="h1" size={500} weight="bold">
