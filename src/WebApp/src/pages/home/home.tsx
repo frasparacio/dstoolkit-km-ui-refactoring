@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { HeaderBar, NavLocation } from "../../components/headerBar/headerBar";
-import { Paged } from "../../types/paged";
-import { Spinner, Dropdown, Option, Divider, Button } from "@fluentui/react-components";
+// import { Paged } from "../../types/paged";
+import { Spinner, Button } from "@fluentui/react-components";
 import { httpClient } from "../../utils/httpClient/httpClient";
 import { Header } from "../../components/header/header";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { SearchBox, SearchBoxHandle } from "../../components/searchBox/searchBox";
-import { Filter } from "../../components/filter/filter";
+// import { Filter } from "../../components/filter/filter";
 import { FacetType } from "../../types/facet";
 import { HeaderMenu } from "../../components/headerMenu/headerMenu";
 import { FilterButton } from "../../components/filter/showHideFilterButton";
@@ -40,7 +40,7 @@ export function Home({ isSearchResultsPage }: HomeProps) {
     const [suggestionsAsFilter, setSuggestionsAsFilter] = useState(true); // State for suggestionsAsFilter
     const [orMVRefinerOperator, setOrMVRefinerOperator] = useState(false); // State for orMVRefinerOperator
 
-    const [data, setData] = useState<Paged<SearchResult>>(); // State for data
+    const [data, setData] = useState<SearchResult>(); // State for data
 
     const navigate = useNavigate();
 
@@ -120,31 +120,41 @@ export function Home({ isSearchResultsPage }: HomeProps) {
             },
         };
 
+        //receive large,complex object from API
         const response: any = await httpClient.post(`${window.ENV.API_URL}/api/Search/getDocuments`, payload);
         console.log("*** response", response);
         if (response) {
-            const result: Paged<SearchResult> = response.results.map((x: any) => {
+            //convert to array of document objects
+            const documents: Array<{ Document: Document }> = response.results.map((x: any) => {
                 return {
-                    content_group: x.Document.content_group,
-                    title: x.Document.title,
-                    translated_title: x.Document.translated_title,
-                    authors: x.Document.authors,
-                    summary: x.Document.summary,
-                    key_phrases: x.Document.key_phrases,
-                    source_last_modified: x.Document.source_last_modified,
-                    source_processing_date: x.Document.source_processing_date,
-                    document_url: x.Document.document_url,
-                    count: x.count,
+                    Document: {
+                        content_group: x.Document.content_group,
+                        title: x.Document.title,
+                        translated_title: x.Document.translated_title,
+                        authors: x.Document.authors,
+                        summary: x.Document.summary,
+                        key_phrases: x.Document.key_phrases,
+                        source_last_modified: x.Document.source_last_modified,
+                        source_processing_date: x.Document.source_processing_date,
+                        document_url: x.Document.document_url,
+                    },
                 };
             });
+
+            const result: SearchResult = {
+                results: documents,
+                count: response.count,
+            };
+
             setData(result);
+
             console.log("*** data", data);
         } else {
             console.error("API response or data is undefined");
         }
         setIsLoading(false);
     }
-
+    console.log("count", data?.count);
     return (
         <>
             <Header className="flex flex-col justify-between bg-contain bg-right-bottom bg-no-repeat" size={"large"}>
@@ -184,7 +194,7 @@ export function Home({ isSearchResultsPage }: HomeProps) {
                         <FilterButton className="" onFilterPress={onFilterPress} />
                     </div>
 
-                    <div className="col-span-1 col-start-2  flex md:col-span-3 md:col-start-2">
+                    <div className="col-span-1 col-start-2 flex md:col-span-3 md:col-start-2">
                         <HeaderMenu className="" />
                         <Button
                             className=""
@@ -212,7 +222,12 @@ export function Home({ isSearchResultsPage }: HomeProps) {
 
                     <div className="col-span-3 col-start-2 ">
                         <div className="flex justify-between">
-                            <div className="ml-5 flex">About X Results</div>
+                            {data?.count ? (
+                                <div className="ml-5 flex">About {data?.count} Results</div>
+                            ) : (
+                                <div className="ml-5 flex"></div>
+                            )}
+
                             <div className="mr-40 flex ">
                                 <DateFilterDropdownMenu />
                             </div>
@@ -226,7 +241,24 @@ export function Home({ isSearchResultsPage }: HomeProps) {
                             )}
                             {!isLoading && (
                                 <div className="ml-5 mt-5">
-                                    <SearchResultCard />
+                                    {data &&
+                                        data.results.map((item, index) => {
+                                            const document = item.Document;
+                                            return (
+                                                <SearchResultCard
+                                                    key={index}
+                                                    content_group={document.content_group}
+                                                    title={document.title}
+                                                    translated_title={document.translated_title}
+                                                    authors={document.authors}
+                                                    summary={document.summary}
+                                                    key_phrases={document.key_phrases}
+                                                    source_last_modified={document.source_last_modified}
+                                                    source_processing_date={document.source_processing_date}
+                                                    document_url={document.document_url}
+                                                />
+                                            );
+                                        })}
                                 </div>
                             )}
                         </div>

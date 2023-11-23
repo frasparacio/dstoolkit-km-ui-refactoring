@@ -1,55 +1,79 @@
-import { Button, makeStyles } from "@fluentui/react-components";
+import { Button, makeStyles, Text } from "@fluentui/react-components";
 import { Tag, TagGroup } from "@fluentui/react-tags-preview";
 import { Sparkle24Regular } from "@fluentui/react-icons";
+import { KMBrandRamp } from "../../styles";
+
+interface SearchResultCardProps {
+    key: any;
+    content_group: any;
+    title: any;
+    translated_title: any;
+    authors: any;
+    summary: any;
+    key_phrases: any;
+    source_last_modified: any;
+    source_processing_date: any;
+    document_url: any;
+}
 
 const useStyles = makeStyles({
     wrapper: {
-      columnGap: "6px",
-      display: "flex",
-      marginTop: "10px",
-      
+        columnGap: "6px",
+        display: "flex",
+        marginTop: "10px",
     },
-  });
+});
 
-export function SearchResultCard() {
+export function SearchResultCard({
+    content_group,
+    title,
+    translated_title,
+    authors,
+    summary,
+    key_phrases,
+    source_last_modified,
+    source_processing_date,
+    document_url,
+}: SearchResultCardProps) {
     const styles = useStyles();
     return (
         <div className="min-h-80 flex min-w-[278px] flex-grow flex-col overflow-hidden bg-white py-5 pl-5 pr-4 ">
             <div className="-ml-5 -mr-4 -mt-5 h-1" />
             <div className="flex flex-row ">
-                <div className="flex items-center">imggggggggggg</div> 
+                <div className="flex items-center">imggggggggggg</div>
                 <div className="ml-5 flex-col">
-                    <div className="flex-1 flex-row ">icon + citation format</div> 
-                    <div className="flex-1 flex-row mt-2">Title - exampleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</div>
-                    <div className="flex-1 flex-row mt-2">Publish date</div>
+                    <div className="flex-1 flex-row">
+                        <Text weight="semibold">{content_group}</Text>
+                    </div>
+                    <div className="mt-2 flex-1 flex-row">
+                        <Text as="h1" size={500} weight="bold">
+                            {translated_title}
+                        </Text>
+                    </div>
+                    <div className="mt-2 flex-1 flex-row">
+                        <Text weight="semibold" size={200} style={{ color: KMBrandRamp[40]}}>
+                            {source_last_modified} | {authors}
+                        </Text>
+                    </div>
                     <div className={styles.wrapper}>
-                        <Button appearance="outline" >See More</Button>
-                        <Button appearance="outline" >Download</Button>
-                        <Button appearance="outline" ><Sparkle24Regular/></Button>
+                        <Button appearance="outline">See More</Button>
+                        <Button appearance="outline">Download</Button>
+                        <Button appearance="outline">
+                            <Sparkle24Regular />
+                        </Button>
                     </div>
                 </div>
             </div>
 
-            
-            <div className="flex flex-1 min-h-[80px] text-ellipsis pt-2 ">
-                Fabric integrates proven technologies like Azure Data Factory, Azure Synapse, and Microsoft Power BI
-                into a single unified product, empowering data and business professionals alike to unlock the potential
-                of data and lay the foundation for the era of AI. ... Introducing Microsoft Fabric – a unified analytics
-                solution for the era of AI 9 ... Unlocking Transformative Data Value with Microsoft Fabric A
-                three-phased approach
-            </div>
+            <div className="flex min-h-[80px] flex-1 text-ellipsis pt-2 ">{summary}</div>
 
-            <div className="flex items-center pt-5 text-[12px]">
-                <TagGroup role="list">
-                    <Tag role="listitem" className="bg-blue-100 text-blue-600">
-                        abc
-                    </Tag>
-                    <Tag role="listitem" className="bg-blue-100 text-blue-600">
-                        abc
-                    </Tag>
-                    <Tag role="listitem" className="bg-blue-100 text-blue-600">
-                        abc
-                    </Tag>
+            <div className="flex flex-wrap items-center">
+                <TagGroup role="list" className="flex flex-wrap">
+                    {key_phrases.map((key_phrase: string, index: number) => (
+                        <Tag key={index} role="listitem" size="extra-small" className="mb-2">
+                            {key_phrase}
+                        </Tag>
+                    ))}
                 </TagGroup>
             </div>
             <h6 className="border-b border-b-neutral-300 pb-5"></h6>
