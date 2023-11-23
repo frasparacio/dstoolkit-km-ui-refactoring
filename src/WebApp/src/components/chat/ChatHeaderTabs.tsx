@@ -1,5 +1,5 @@
-import { Button, Tab, TabList, Divider } from "@fluentui/react-components";
-import { Search20Regular, Filter20Filled } from "@fluentui/react-icons";
+import { Tab, TabList } from "@fluentui/react-components";
+import { Search20Regular } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 
 interface ChatHeaderTabsProps {

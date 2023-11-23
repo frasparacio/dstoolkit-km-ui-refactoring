@@ -3,7 +3,7 @@ import {
     Textarea,
 } from "@fluentui/react-components";
 import { AttachRegular, SendRegular } from "@fluentui/react-icons";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 interface Props {
     onSend: (question: string) => void;

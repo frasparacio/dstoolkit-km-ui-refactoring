@@ -7,7 +7,6 @@ import { OptionsPanel } from "./OptionsPanel";
 import { httpClient } from "../../utils/httpClient/httpClient";
 import { Button } from "@fluentui/react-components";
 import { ChatAdd24Regular } from "@fluentui/react-icons";
-import { SharedStyles } from "../../styles";
 import './chatRoom.scss'
 
 export function ChatRoom() {
