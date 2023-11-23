@@ -137,6 +137,7 @@ export function Home({ isSearchResultsPage }: HomeProps) {
                         source_last_modified: x.Document.source_last_modified,
                         source_processing_date: x.Document.source_processing_date,
                         document_url: x.Document.document_url,
+                        document_id: x.Document.document_id,
                     },
                 };
             });

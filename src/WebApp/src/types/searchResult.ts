@@ -8,6 +8,7 @@ interface Document {
   "source_processing_date": string;
   "document_url": string;
   "authors": string[];
+  "document_id": string;
 }
 
 interface SearchResult {
