@@ -83,7 +83,7 @@ export function DocDialog({ title, lastModified, summary, filePath, tokens }: Do
                             {lastModified}
                         </Text>
                         </div>
-                        <div className="flex justify-between -ml-3">
+                        <div className="flex justify-between -ml-3 mt-5">
                             <div className={styles.tabList}>
                                 <TabList {...props}>
                                     <Tab value="tab1">Document</Tab>
@@ -97,7 +97,7 @@ export function DocDialog({ title, lastModified, summary, filePath, tokens }: Do
                             </Button>
                             </div>
                         </div>
-                        <div className="pb-4">
+                        <div className="pb-4 ">
                             <Divider />
                         </div>
                     </DialogTitle>
