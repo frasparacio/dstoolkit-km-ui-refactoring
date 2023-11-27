@@ -4,11 +4,9 @@
 namespace Knowledge.Services.Metadata
 {
     using Azure.Identity;
-    using Azure.Storage;
     using Azure.Storage.Blobs;
     using Knowledge.Configuration.AzureStorage;
     using Knowledge.Services;
-    using Knowledge.Services.Helpers;
     using Microsoft.ApplicationInsights;
     using System;
     using System.IO;
