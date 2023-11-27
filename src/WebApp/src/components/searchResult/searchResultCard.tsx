@@ -5,6 +5,7 @@ import { Sparkle24Regular } from "@fluentui/react-icons";
 import { Icon } from '@fluentui/react';
 import { getFileTypeIconProps, FileIconType } from '@fluentui/react-file-type-icons';
 import { KMBrandRamp } from "../../styles";
+import { DocDialog } from "../documentViewer/docDialog";
 
 interface SearchResultCardProps {
     key: any;
@@ -77,7 +78,7 @@ export function SearchResultCard({
                         </Text>
                     </div>
                     <div className={styles.wrapper}>
-                        <Button appearance="outline">See More</Button>
+                        <DocDialog />
                         <Button appearance="outline">Download</Button>
                         <Button appearance="outline">
                             <Sparkle24Regular />
