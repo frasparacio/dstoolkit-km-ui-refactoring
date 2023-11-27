@@ -151,6 +151,7 @@ export function Home({ isSearchResultsPage }: HomeProps) {
                         source_processing_date: formatDateTime(x.Document.source_processing_date),
                         document_url: x.Document.document_url,
                         document_id: x.Document.document_id,
+                        metadata_storage_path: x.Document.metadata_storage_path,
                     },
                 };
             });
@@ -158,17 +159,18 @@ export function Home({ isSearchResultsPage }: HomeProps) {
             const result: SearchResult = {
                 results: documents,
                 count: response.count,
+                tokens: response.tokens,
             };
 
             setData(result);
 
-            console.log("*** data", data);
+            
         } else {
             console.error("API response or data is undefined");
         }
         setIsLoading(false);
     }
-    console.log("count", data?.count);
+    
     return (
         <>
             <Header className="flex flex-col justify-between bg-contain bg-right-bottom bg-no-repeat" size={"large"}>
@@ -270,6 +272,8 @@ export function Home({ isSearchResultsPage }: HomeProps) {
                                                     source_last_modified={document.source_last_modified}
                                                     source_processing_date={document.source_processing_date}
                                                     document_url={document.document_url}
+                                                    metadata_storage_path={document.metadata_storage_path}
+                                                    tokens={data.tokens}
                                                 />
                                             );
                                         })}

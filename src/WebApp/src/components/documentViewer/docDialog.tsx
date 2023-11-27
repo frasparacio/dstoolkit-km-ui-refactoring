@@ -16,9 +16,13 @@ import {
 } from "@fluentui/react-components";
 import { Dismiss24Regular } from "@fluentui/react-icons";
 import { KMBrandRamp } from "../../styles";
+import { useEffect, useState } from "react";
+import { set } from "date-fns";
 
 const useStyles = makeStyles({
     dialog: {
+        maxHeight: "fit-content",
+        height: "50vw",
         maxWidth: "fit-content",
         width: "70vw",
         "@media (max-width: 780px)": {
@@ -42,10 +46,22 @@ interface DocDialogProps {
     title: string;
     lastModified: string;
     summary: string;
+    filePath: string;
+    tokens: any;
 }
 
-export function DocDialog({ title, lastModified, summary }: DocDialogProps, props: Partial<TabListProps>) {
+export function DocDialog({ title, lastModified, summary, filePath, tokens }: DocDialogProps, props: Partial<TabListProps>) {
     const styles = useStyles();
+
+    const [urlWithSasToken, setUrlWithSasToken] = useState<string>("");
+
+    useEffect(() => {
+        const [[firstKey, firstValue]] = Object.entries(tokens || {});
+      
+        if (filePath.startsWith(firstKey)) {
+          setUrlWithSasToken(filePath + firstValue);
+        }
+      }, [filePath]);
 
     return (
         <Dialog>
@@ -87,8 +103,12 @@ export function DocDialog({ title, lastModified, summary }: DocDialogProps, prop
                     </DialogTitle>
 
                     <div className="flex w-full justify-between" style={{ width: "200%" }}>
-                        <div className="mr-5 w-full flex-grow-0 border border-green-400" style={{ width: "450%" }}>
-                            pdf viewer
+                        <div className="mr-5 w-full flex-grow-0" style={{ width: "450%", height: "300%" }}>
+                            <iframe
+                                src={urlWithSasToken}
+                                width="100%"
+                                height="100%"
+                            />
                         </div>
                         <DialogContent className="">
                             <div className="flex justify-between mb-4 ">

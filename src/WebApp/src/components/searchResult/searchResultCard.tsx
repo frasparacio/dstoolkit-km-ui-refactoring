@@ -18,6 +18,8 @@ interface SearchResultCardProps {
     source_last_modified: any;
     source_processing_date: any;
     document_url: any;
+    metadata_storage_path: any;
+    tokens: any;
 }
 
 const useStyles = makeStyles({
@@ -38,6 +40,8 @@ export function SearchResultCard({
     source_last_modified,
     source_processing_date,
     document_url,
+    metadata_storage_path,
+    tokens
 }: SearchResultCardProps) {
     const styles = useStyles();
 
@@ -56,7 +60,7 @@ export function SearchResultCard({
         default:
             fileType = 'default'; // Default file type
     }
-    
+
     return (
         <div className="min-h-80 flex min-w-[278px] flex-grow flex-col overflow-hidden bg-white py-5 pl-5 pr-4 ">
             <div className="-ml-5 -mr-4 -mt-5 h-1" />
@@ -78,7 +82,7 @@ export function SearchResultCard({
                         </Text>
                     </div>
                     <div className={styles.wrapper}>
-                        <DocDialog title={title} lastModified={source_last_modified} summary={summary}/>
+                        <DocDialog title={title} lastModified={source_last_modified} summary={summary} filePath={metadata_storage_path} tokens={tokens}/>
                         <Button appearance="outline">Download</Button>
                         <Button appearance="outline">
                             <Sparkle24Regular />

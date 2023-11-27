@@ -9,9 +9,15 @@ interface Document {
   "document_url": string;
   "authors": string[];
   "document_id": string;
+  "metadata_storage_path": string;
+}
+
+interface Tokens {
+  [url: string]: string;
 }
 
 interface SearchResult {
   results: { Document: Document }[];
   count: number;
+  tokens: Tokens;
 }
