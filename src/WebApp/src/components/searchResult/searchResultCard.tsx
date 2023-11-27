@@ -4,7 +4,7 @@ import { Sparkle24Regular } from "@fluentui/react-icons";
 import { Icon } from '@fluentui/react';
 import { getFileTypeIconProps } from '@fluentui/react-file-type-icons';
 import { KMBrandRamp } from "../../styles";
-import { DocDialog } from "../documentViewer/docDialog";
+import { DocDialog } from "../documentViewer/documentViewer";
 
 interface SearchResultCardProps {
     key: any;
