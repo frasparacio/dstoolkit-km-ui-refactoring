@@ -24,12 +24,7 @@ const useStyles = makeStyles({
         maxHeight: "fit-content",
         height: "50vw",
         maxWidth: "fit-content",
-        width: "70vw",
-        "@media (max-width: 780px)": {
-            // adjust width to your needs
-            width: "90vw",
-            backgroundColor: "red", // red color only to show when it changes
-        },
+        width: "80vw",
         ...shorthands.borderRadius("1rem"),
     },
     tabList: {
@@ -69,7 +64,7 @@ export function DocDialog({ title, lastModified, summary, filePath, tokens }: Do
                 <Button>See More</Button>
             </DialogTrigger>
             <DialogSurface className={styles.dialog}>
-                <DialogBody className="">
+                <DialogBody className="mt-5">
                     <DialogTitle
                         action={
                             <DialogTrigger action="close">
