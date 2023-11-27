@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
 import { Button, makeStyles, Text } from "@fluentui/react-components";
 import { Tag, TagGroup } from "@fluentui/react-tags-preview";
 import { Sparkle24Regular } from "@fluentui/react-icons";
 import { Icon } from '@fluentui/react';
-import { getFileTypeIconProps, FileIconType } from '@fluentui/react-file-type-icons';
+import { getFileTypeIconProps } from '@fluentui/react-file-type-icons';
 import { KMBrandRamp } from "../../styles";
 import { DocDialog } from "../documentViewer/docDialog";
 

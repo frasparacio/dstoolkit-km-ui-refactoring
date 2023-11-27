@@ -17,7 +17,6 @@ import {
 import { Dismiss24Regular } from "@fluentui/react-icons";
 import { KMBrandRamp } from "../../styles";
 import { useEffect, useState } from "react";
-import { set } from "date-fns";
 
 const useStyles = makeStyles({
     dialog: {
