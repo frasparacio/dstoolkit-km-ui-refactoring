@@ -308,6 +308,55 @@
       "sourceFieldName": "/document/pages/*/Contributors/*",
       "targetFieldName": "Contributors",
       "mappingFunction": null
+    },{
+      "sourceFieldName": "/document/pages/*/LeadAuthor/*",
+      "targetFieldName": "LeadAuthor",
+      "mappingFunction": null
+    },
+    {
+      "sourceFieldName": "/document/pages/*/AuthorLocation/*",
+      "targetFieldName": "AuthorLocation",
+      "mappingFunction": null
+    },
+    {
+      "sourceFieldName": "/document/pages/*/ProjectName/*",
+      "targetFieldName": "ProjectName",
+      "mappingFunction": null
+    },
+    {
+      "sourceFieldName": "/document/pages/*/ProjectNumber/*",
+      "targetFieldName": "ProjectNumber",
+      "mappingFunction": null
+    },
+    {
+      "sourceFieldName": "/document/pages/*/Biomaterials/*",
+      "targetFieldName": "Biomaterials",
+      "mappingFunction": null
+    },
+    {
+      "sourceFieldName": "/document/pages/*/ChemicalMaterials/*",
+      "targetFieldName": "ChemicalMaterials",
+      "mappingFunction": null
+    },
+    {
+      "sourceFieldName": "/document/pages/*/GlobalStudyNumber/*",
+      "targetFieldName": "GlobalStudyNumber",
+      "mappingFunction": null
+    },
+    {
+      "sourceFieldName": "/document/pages/*/SecurityClassification/*",
+      "targetFieldName": "SecurityClassification",
+      "mappingFunction": null
+    },
+    {
+      "sourceFieldName": "/document/pages/*/ClinicalSite/*",
+      "targetFieldName": "ClinicalSite",
+      "mappingFunction": null
+    },
+    {
+      "sourceFieldName": "/document/pages/*/CNERSummary/*",
+      "targetFieldName": "CNERSummary",
+      "mappingFunction": null
     }
   ],
   "encryptionKey": null

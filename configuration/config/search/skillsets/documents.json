@@ -332,13 +332,17 @@
                     "targetName": "ReportTitle"
                 },
                 {
+                    "name": "Lead Author",
+                    "targetName": "LeadAuthor"
+                },    
+                {
                     "name": "Author",
                     "targetName": "Author"
-                },
+                },    
                 {
-                    "name": "Project Leader",
-                    "targetName": "ProjectLeader"
-                },
+                    "name": "Author Location",
+                    "targetName": "AuthorLocation"
+                },                
                 {                    
                     "name": "Publication Date",
                     "targetName": "PublicationDate"
@@ -350,6 +354,42 @@
                 {
                     "name": "Contributors",
                     "targetName": "Contributors"
+                },
+                {
+                    "name": "Project Leader",
+                    "targetName": "ProjectLeader"
+                },
+                {
+                    "name": "Project Name",
+                    "targetName": "ProjectName"
+                },
+                {
+                    "name": "Project Number",
+                    "targetName": "ProjectNumber"
+                },
+                {
+                    "name": "biomaterials",
+                    "targetName": "Biomaterials"
+                },
+                {
+                    "name": "chemical_materials",
+                    "targetName": "ChemicalMaterials"
+                },
+                {
+                    "name": "Global Study Number",
+                    "targetName": "GlobalStudyNumber"
+                },
+                {
+                    "name": "Security Classification",
+                    "targetName": "SecurityClassification"
+                },
+                {
+                    "name": "Clinical Site",
+                    "targetName": "ClinicalSite"
+                },
+                {
+                    "name": "Summary",
+                    "targetName": "CNERSummary"
                 }
             ]
         },        
