@@ -82,7 +82,7 @@ export function SearchResultCard({
             <div className="-ml-5 -mr-4 -mt-5 h-1" />
             <div className="flex flex-row ">
                 <div className="flex items-center">
-                    <img className="w-20 h-20" src="https://dskm4data.blob.core.windows.net/images?skoid=48959ef8-406a-4455-bdcd-f984c45f0201&sktid=16b3c013-d300-468d-ac64-7eda0820b6d3&skt=2023-11-27T16%3A37%3A04Z&ske=2023-11-27T20%3A37%3A04Z&sks=b&skv=2022-11-02&sv=2022-11-02&spr=https,http&st=2023-11-27T16%3A37%3A04Z&se=2023-11-28T16%3A37%3A04Z&sr=c&sp=r&sig=uPlPiynqirQYMIxJmbHxq8tbTAcx6157qt%2B8ANTo8Lc%3D" alt="image" />
+                    <img className="w-20 h-20" src="" alt="image" />
                 </div>
                 <div className="ml-5 flex-col">
                     <div className="flex-1 flex-row items center">
