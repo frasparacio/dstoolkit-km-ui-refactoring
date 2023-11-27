@@ -95,6 +95,19 @@ export function Home({ isSearchResultsPage }: HomeProps) {
         setShowCopilot(!showCopilot);
     }
 
+    const formatDateTime = (dateTimeString: string) => {
+        const date = new Date(dateTimeString);
+        return new Intl.DateTimeFormat("en-US", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: true,
+        }).format(date);
+    };
+
     // Custom hook that can be used instead of useEffect() with zero dependencies.
     // Avoids a double execution of the effect when in React 18 DEV mode with <React.StrictMode>
     useEffectOnce(() => {});
@@ -134,8 +147,8 @@ export function Home({ isSearchResultsPage }: HomeProps) {
                         authors: x.Document.authors,
                         summary: x.Document.summary,
                         key_phrases: x.Document.key_phrases,
-                        source_last_modified: x.Document.source_last_modified,
-                        source_processing_date: x.Document.source_processing_date,
+                        source_last_modified: formatDateTime(x.Document.source_last_modified),
+                        source_processing_date: formatDateTime(x.Document.source_processing_date),
                         document_url: x.Document.document_url,
                         document_id: x.Document.document_id,
                     },

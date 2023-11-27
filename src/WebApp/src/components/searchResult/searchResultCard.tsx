@@ -78,7 +78,7 @@ export function SearchResultCard({
                         </Text>
                     </div>
                     <div className={styles.wrapper}>
-                        <DocDialog />
+                        <DocDialog title={title} lastModified={source_last_modified} summary={summary}/>
                         <Button appearance="outline">Download</Button>
                         <Button appearance="outline">
                             <Sparkle24Regular />

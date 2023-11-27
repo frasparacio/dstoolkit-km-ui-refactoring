@@ -15,6 +15,7 @@ import {
     shorthands,
 } from "@fluentui/react-components";
 import { Dismiss24Regular } from "@fluentui/react-icons";
+import { KMBrandRamp } from "../../styles";
 
 const useStyles = makeStyles({
     dialog: {
@@ -37,9 +38,13 @@ const useStyles = makeStyles({
     },
 });
 
-interface DocDialogProps {}
+interface DocDialogProps {
+    title: string;
+    lastModified: string;
+    summary: string;
+}
 
-export function DocDialog(props: Partial<TabListProps>) {
+export function DocDialog({ title, lastModified, summary }: DocDialogProps, props: Partial<TabListProps>) {
     const styles = useStyles();
 
     return (
@@ -56,11 +61,13 @@ export function DocDialog(props: Partial<TabListProps>) {
                             </DialogTrigger>
                         }
                     >
-                        Dialog title
+                        {title}
                         <div>
-                            <Text size={200}>Date subtitle here</Text>
+                        <Text weight="semibold" size={200} style={{ color: KMBrandRamp[40]}}>
+                            {lastModified}
+                        </Text>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between -ml-3">
                             <div className={styles.tabList}>
                                 <TabList {...props}>
                                     <Tab value="tab1">Document</Tab>
@@ -68,9 +75,11 @@ export function DocDialog(props: Partial<TabListProps>) {
                                     <Tab value="tab3">Tab3</Tab>
                                 </TabList>
                             </div>
+                            <div className="mt-4">
                             <Button className="h-8" appearance="primary">
                                 Download
                             </Button>
+                            </div>
                         </div>
                         <div className="pb-4">
                             <Divider />
@@ -89,9 +98,7 @@ export function DocDialog(props: Partial<TabListProps>) {
                             </div>
                             <div className="flex mb-4">
                                 <Text size={200} weight="regular">
-                                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aliquid, explicabo
-                                    repudiandae impedit doloribus laborum quidem maxime dolores perspiciatis non ipsam,
-                                    nostrum commodi quis autem sequi, incidunt cum? Consequuntur, repellendus nostrum?
+                                    {summary}
                                 </Text>
                             </div>
                         </DialogContent>
