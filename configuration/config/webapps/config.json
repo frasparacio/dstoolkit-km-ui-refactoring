@@ -20,7 +20,8 @@
                     "EnablePrivateAccess": false,
                     "slots": [
                         "staging"
-                    ]
+                    ],
+                    "Runtime": "dotnet:6"
                 },
                 {
                     "Id": "api",
@@ -28,16 +29,18 @@
                     "Path": "src\\CognitiveSearch.UI\\Knowledge.API",
                     "AccessIPRestriction": false,
                     "AccessSubnetRestriction": false,
-                    "EnablePrivateAccess": false
+                    "EnablePrivateAccess": false,
+                    "Runtime": "dotnet:6"
                 },
                 {
                     "Id": "ui",
                     "Name": "{{config.name}}-ui",
-                    "Path": "src\\CognitiveSearch.UI\\Knowledge.API",
+                    "Path": "src\\WebApp",
                     "AccessIPRestriction": false,
                     "AccessSubnetRestriction": false,
                     "EnablePrivateAccess": false,
-                    "isReactApp": true
+                    "isReactApp": true,
+                    "Runtime": "node:18LTS"
                 }
             ]
         },

@@ -1314,29 +1314,27 @@ function New-Functions {
         # Consumption Plan Support
         $consumption = ($plan.Sku -eq "Y1")
     
-        if (! $consumption) {
-            if ($plan.IsLinux) {
-                if (!(Test-AppPlanExistence $plan.Name)) {
-                    # Create a Linux plan
+        if (!$consumption) {
+
+            if (!(Test-AppPlanExistence $plan.Name)) {
+                if ($plan.IsLinux) {                
                     az functionapp plan create `
                         --name $plan.Name `
                         --resource-group $plan.ResourceGroup `
                         --location $config.location `
                         --sku $plan.Sku `
                         --is-linux true `
-                        --number-of-workers 1 
+                        --number-of-workers 1                 
+                }
+                else {
+                        az functionapp plan create `
+                            --name $plan.Name `
+                            --resource-group $plan.ResourceGroup `
+                            --location $config.location `
+                            --sku $plan.Sku
                 }
             }
-            else {
-                if (!(Test-AppPlanExistence $plan.Name)) {
-                    # Create a Non-Linux plan
-                    az functionapp plan create `
-                        --name $plan.Name `
-                        --resource-group $plan.ResourceGroup `
-                        --location $config.location `
-                        --sku $plan.Sku
-                }
-            }
+            
         }
         else {
             Write-Host "Consumption Plan. Skipping App Service Plan creation."
@@ -1347,7 +1345,6 @@ function New-Functions {
             if ($plan.IsLinux) {
                 if (!(Test-FunctionExistence $functionApp.Name)) {
                     if ($consumption) {
-                        # Create a Function App
                         az functionapp create --name $functionApp.Name `
                             --storage-account $params.techStorageAccountName `
                             --consumption-plan-location $config.location `
@@ -1826,7 +1823,7 @@ function New-WebApps {
                             --plan $plan.Name `
                             --resource-group $plan.ResourceGroup `
                             --https-only true `
-                            --runtime 'dotnet:6'
+                            --runtime $webApp.Runtime
     
                         if ($config.stagingUIEnabled) {
                             az webapp deployment slot create --name $webApp.Name `
@@ -1916,6 +1913,16 @@ function Build-WebApps {
         dotnet publish -r linux-x64 --self-contained false -c RELEASE -o $buildpath | Out-Null
         return $buildpath
     }
+
+    function publish_react($function){
+        Write-Host $pwd
+        $buildpath = join-path $deploymentdir "webapps" ($function + ".publish." + $now)
+        Write-Host $buildpath
+        npm install --global yarn
+        yarn install
+        yarn build
+        Copy-Item -Path dist -Destination $buildpath -Recurse
+    }
     
     foreach ($plan in $webappscfg.AppPlans) {
         foreach ($webApp in $plan.Services) {
@@ -1925,16 +1932,24 @@ function Build-WebApps {
                 Write-Host $appLocation -ForegroundColor DarkGreen
     
                 Push-Location $appLocation
-                if ($plan.IsLinux) {
-                    if (-not $WindowsOnly) {
-                        Write-Host "Building Linux WebApp "$webApp.Name -ForegroundColor DarkGreen
-                        $respath = publish_linux $webApp.Name
-                    }
+
+                if ($webApp.isReactApp){
+                    Write-Host "Building React App "$webApp.Name -ForegroundColor DarkGreen
+                    $respath = publish_react $webApp.Name
                 }
-                else {
-                    if (-not $LinuxOnly) {
-                        Write-Host "Building Windows WebApp "$webApp.Name -ForegroundColor DarkGreen
-                        $respath = publish_windows $webApp.Name
+                else
+                {                
+                    if ($plan.IsLinux) {
+                        if (-not $WindowsOnly) {
+                            Write-Host "Building Linux WebApp "$webApp.Name -ForegroundColor DarkGreen
+                            $respath = publish_linux $webApp.Name
+                        }
+                    }
+                    else {
+                        if (-not $LinuxOnly) {
+                            Write-Host "Building Windows WebApp "$webApp.Name -ForegroundColor DarkGreen
+                            $respath = publish_windows $webApp.Name
+                        }
                     }
                 }
 
@@ -1962,9 +1977,7 @@ function Build-WebApps {
     if ( $Publish ) {
         Publish-WebApps -LinuxOnly:$LinuxOnly -WindowsOnly:$WindowsOnly 
     }
-    # if ( $KeyVaultPolicies ) {
-    #     Add-KeyVaultWebAppsRBAC 
-    # }
+
     if ( $Settings ) {
         Publish-WebAppsSettings -LinuxOnly:$LinuxOnly -WindowsOnly:$WindowsOnly
     }
@@ -2132,6 +2145,7 @@ function Publish-WebApps {
         [switch] $LinuxOnly,
         [switch] $WindowsOnly
     )
+    
     
     if (-not $config.stagingUIEnabled) {
         $Production = $true
